@@ -18,6 +18,11 @@ class DataGraphs:
             self.columns.append([row[i] for row in all_data])
 
     def show_histogram_graph(self, column_name, bins_count):
+        """
+        Shows selected column's data histogram divided in given amount of bins
+        :param column_name: Column name
+        :param bins_count: Bins count
+        """
         data = self.columns[self.header.index(column_name)]
         plt.hist(data, weights=np.ones(len(data)) / len(data), ec='k', bins=bins_count)
         plt.ylabel('Frequency')
@@ -83,6 +88,11 @@ class DataGraphs:
         plt.show()
 
     def show_box_plot(self, continuous_attribute, categorical_attribute):
+        """
+        Shows box plot graph between one continuous and one categorical attributes
+        :param continuous_attribute: Continuous attribute
+        :param categorical_attribute: Categorical attribute
+        """
         cont_attr = self.columns[self.header.index(continuous_attribute)]
         cat_attr = self.columns[self.header.index(categorical_attribute)]
 
@@ -116,6 +126,9 @@ class DataGraphs:
         plt.show()
 
     def show_scatter_matrix(self):
+        """
+        Shows data's scatter matrix graph
+        """
         sn.set()
 
         df = pd.read_csv('diamonds.csv', usecols=lambda col: col not in ['id'])
@@ -123,6 +136,13 @@ class DataGraphs:
         plt.show()
 
     def filter_column(self, data, condition_column, condition):
+        """
+        Filter data list by given value
+        :param data: Data list
+        :param condition_column: Condition column name
+        :param condition: Condition value
+        :return: Filtered data
+        """
         result = []
         condition_index = self.header.index(condition_column)
         for i, item in enumerate(data):
@@ -157,7 +177,8 @@ class DataGraphs:
 
         return result_array
 
-    def get_unique(self, data):
+    @staticmethod
+    def get_unique(data):
         """
         Extracts unique values from given data
         :param data: Data
@@ -170,7 +191,8 @@ class DataGraphs:
 
         return result
 
-    def normalize_data(self, data):
+    @staticmethod
+    def normalize_data(data):
         """
         Normalizes data for stacked bars graph
         :param data: Data

@@ -4,6 +4,11 @@ from data_graphs import DataGraphs
 
 
 def read_data(file_name):
+    """
+    Reads data from file
+    :param file_name: File name
+    :return: Diamonds data, header row cell's names
+    """
     _diamonds = []
     file = open(file_name, 'r')
     _header = [item.replace('"', '').rstrip('\n') for item in file.readline().split(',')]
@@ -19,6 +24,11 @@ def read_data(file_name):
 
 
 def filter_data(data):
+    """
+    Filters items where length, width or depth equals 0
+    :param data: Data
+    :return: Filtered data
+    """
     filtered_data = []
     for item in data:
         if item.length != 0 and item.width != 0 and item.depth != 0:
@@ -41,6 +51,6 @@ data_graphs = DataGraphs(filter_data(diamonds), header)
 # data_graphs.show_histogram('carat', 30)
 # data_graphs.show_scatter_graph('price', 'depth_pct')
 # data_graphs.show_stacked_bars('cut', 'color')
-# data_graphs.show_box_plot('price', 'cut')
+data_graphs.show_box_plot('price', 'cut')
 # data_graphs.show_correlation_matrix(continuous_columns)
-data_graphs.show_scatter_matrix()
+# data_graphs.show_scatter_matrix()
