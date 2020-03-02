@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from data_analyser import DataAnalyser
+import pandas as pd
+import seaborn as sn
 
 
 class DataGraphs:
@@ -33,9 +36,11 @@ class DataGraphs:
 
         plt.plot(data, data2, 'o')
         # plt.scatter(data, data2)
-        # z = np.polyfit(data, data2, 1)
-        # p = np.poly1d(z)
-        # plt.plot(data, p(data), "r--")
+        z = np.polyfit(data, data2, 1)
+        p = np.poly1d(z)
+        plt.plot(data, p(data), "r")
+        # plt.ylim(0, 12)
+        # plt.xlim(0, 12)
 
         plt.xlabel(column_name)
         plt.ylabel(column2_name)
@@ -66,7 +71,8 @@ class DataGraphs:
 
         plt.bar(bars_names, normalized_data[0], width, color=colors[color_counter], label=colors_labels[0])
         for i, bar_data in enumerate(normalized_data[1:]):
-            plt.bar(bars_names, bar_data, width, color=colors[color_counter % len(colors)], bottom=bars_sum, label=colors_labels[labels_counter])
+            plt.bar(bars_names, bar_data, width, color=colors[color_counter % len(colors)], bottom=bars_sum,
+                    label=colors_labels[labels_counter])
             bars_sum += bar_data
             labels_counter += 1
             color_counter += 1
@@ -92,6 +98,30 @@ class DataGraphs:
         plt.xlabel(categorical_attribute)
         plt.show()
 
+    def show_correlation_matrix(self, columns):
+        """
+        Shows correlation matrix plot between given column indexes
+        :param columns: Columns indexes
+        """
+        data = {}
+        for column in columns:
+            data[self.header[column]] = self.columns[column]
+
+        df = pd.DataFrame(data)
+
+        corr = df.corr()
+        corr.style.background_gradient(cmap='coolwarm')
+
+        sn.heatmap(corr, annot=True)
+        plt.show()
+
+    def show_scatter_matrix(self):
+        sn.set()
+
+        df = pd.read_csv('diamonds.csv', usecols=lambda col: col not in ['id'])
+        sn.pairplot(df, plot_kws={'edgecolor': 'none', 's': 5})
+        plt.show()
+
     def filter_column(self, data, condition_column, condition):
         result = []
         condition_index = self.header.index(condition_column)
@@ -100,7 +130,6 @@ class DataGraphs:
                 result.append(item)
 
         return result
-
 
     def format_data(self, data, data2):
         """
@@ -156,7 +185,7 @@ class DataGraphs:
         for bar in data:
             bar_result = []
             for i, bar_data in enumerate(bar):
-                bar_result.append(bar_data*100/all_sums[i])
+                bar_result.append(bar_data * 100 / all_sums[i])
 
             result.append(bar_result)
 
